@@ -93,6 +93,7 @@ jobs:
       - name: Smoke test the binary
         env:
           BIN: ${{ runner.temp }}/out/chatto
+          ARCH: ${{ matrix.arch }}
         run: |
           set -euo pipefail
           "$BIN" version
