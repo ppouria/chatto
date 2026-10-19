@@ -597,6 +597,21 @@
         "exhausted": "Wyczerpany",
         "revoked": "Unieważniony"
       }
+    },
+    "registration_requests": {
+      "title": "Prośby o rejestrację",
+      "subtitle": "Prośby o konto czekające na decyzję. Zatwierdzenie tworzy konto z hasłem wybranym przez wnioskodawcę.",
+      "empty": "Brak próśb o rejestrację czekających na sprawdzenie.",
+      "email": "E-mail",
+      "submitted": "Wysłano {time}",
+      "approve": "Zatwierdź",
+      "deny": "Odrzuć",
+      "deny_title": "Odrzucić tę prośbę?",
+      "deny_description": "Wnioskodawca nie dostanie konta. Prośba zostanie usunięta.",
+      "approved": "Utworzono konto {login}.",
+      "denied": "Odrzucono prośbę.",
+      "failed": "Nie udało się zaktualizować prośby.",
+      "load_more": "Załaduj więcej"
     }
   }
 }

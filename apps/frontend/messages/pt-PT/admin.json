@@ -575,6 +575,21 @@
         "exhausted": "Esgotada",
         "revoked": "Revogada"
       }
+    },
+    "registration_requests": {
+      "title": "Pedidos de registo",
+      "subtitle": "Pedidos de conta a aguardar decisão. Ao aprovar, a conta é criada com a palavra-passe escolhida pela pessoa requerente.",
+      "empty": "Nenhum pedido de registo aguarda análise.",
+      "email": "E-mail",
+      "submitted": "Enviado a {time}",
+      "approve": "Aprovar",
+      "deny": "Recusar",
+      "deny_title": "Recusar este pedido?",
+      "deny_description": "A pessoa requerente não receberá uma conta. O pedido será removido.",
+      "approved": "Conta {login} criada.",
+      "denied": "Pedido recusado.",
+      "failed": "Não foi possível atualizar o pedido.",
+      "load_more": "Carregar mais"
     }
   }
 }

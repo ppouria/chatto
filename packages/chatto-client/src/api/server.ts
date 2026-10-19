@@ -20,7 +20,7 @@ export type PublicServerInfo = {
   authorizeUrl: string;
   directRegistrationEnabled: boolean;
   directLoginEnabled: boolean;
-  accountCreationPolicy: 'open' | 'invite_only';
+  accountCreationPolicy: 'open' | 'invite_only' | 'approval';
   welcomeMessage: string | null;
   description: string | null;
   iconUrl: string | null;
@@ -51,9 +51,11 @@ export async function getPublicServerInfo(
     directRegistrationEnabled: response.login?.directRegistrationEnabled ?? false,
     directLoginEnabled: response.login?.directLoginEnabled ?? true,
     accountCreationPolicy:
-      response.login?.accountCreationPolicy === AccountCreationPolicy.INVITE_ONLY
-        ? 'invite_only'
-        : 'open',
+      response.login?.accountCreationPolicy === AccountCreationPolicy.APPROVAL
+        ? 'approval'
+        : response.login?.accountCreationPolicy === AccountCreationPolicy.INVITE_ONLY
+          ? 'invite_only'
+          : 'open',
     welcomeMessage: profile.welcomeMessage,
     description: profile.description,
     iconUrl: profile.logoUrl,

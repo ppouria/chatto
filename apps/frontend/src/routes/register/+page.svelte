@@ -12,7 +12,15 @@
   import AuthLayout from '$lib/components/AuthLayout.svelte';
   import { m } from '$lib/i18n/messages';
   import { Divider, Hint, PageTitle } from '$lib/ui';
-  import { Button, FormError, TextInput, VerificationCodeInput, validate, z } from '$lib/ui/form';
+  import {
+    Button,
+    FormError,
+    TextArea,
+    TextInput,
+    VerificationCodeInput,
+    validate,
+    z
+  } from '$lib/ui/form';
 
   const { data } = $props();
 
@@ -20,11 +28,15 @@
 
   const registrationEnabled = $derived(data.serverInfo?.directRegistrationEnabled ?? true);
   const invitationRequired = $derived(data.serverInfo?.accountCreationPolicy === 'invite_only');
+  // Under the approval policy, applicants send a request that an administrator reviews.
+  const requestMode = $derived(data.serverInfo?.accountCreationPolicy === 'approval');
   const authProviders = $derived(data.serverInfo?.authProviders ?? []);
   const registrationProviders = $derived(
-    authProviders.filter((provider) => provider.autoProvision !== false)
+    authProviders.filter((provider) => !requestMode && provider.autoProvision !== false)
   );
-  const selfServiceAvailable = $derived(registrationEnabled || registrationProviders.length > 0);
+  const selfServiceAvailable = $derived(
+    registrationEnabled || registrationProviders.length > 0 || requestMode
+  );
   const inviteAccepted = $derived(data.inviteAccepted ?? false);
   const inviteError = $derived(data.inviteError ?? false);
 
@@ -40,6 +52,12 @@
   let isResending = $state(false);
   let selectedProviderId = $state<string | null>(null);
   let providerError = $state('');
+  let requestLogin = $state('');
+  let requestEmail = $state('');
+  let requestPassword = $state('');
+  let requestConfirmPassword = $state('');
+  let requestNote = $state('');
+  let requestSubmitted = $state(false);
   let providerPopup: OAuthPopup | null = null;
   let active = true;
   onDestroy(() => {
@@ -75,6 +93,33 @@
       !loginError &&
       !passwordError &&
       !confirmError
+  );
+
+  const requestLoginError = $derived(
+    requestLogin ? validate(loginSchema, requestLogin) : undefined
+  );
+  const requestEmailError = $derived(
+    requestEmail ? validate(emailSchema, requestEmail) : undefined
+  );
+  const requestPasswordError = $derived(
+    requestPassword ? validateNewPassword(requestPassword) : undefined
+  );
+  const requestConfirmError = $derived(
+    requestConfirmPassword && requestPassword !== requestConfirmPassword
+      ? m('common.validation.passwords_match')
+      : undefined
+  );
+  const canSubmitRequest = $derived(
+    Boolean(
+      requestLogin &&
+      requestEmail &&
+      requestPassword &&
+      requestConfirmPassword &&
+      !requestLoginError &&
+      !requestEmailError &&
+      !requestPasswordError &&
+      !requestConfirmError
+    )
   );
 
   function providerIcon(type: string): string {
@@ -188,6 +233,49 @@
     }
   }
 
+  async function handleRequestSubmit(e: Event) {
+    e.preventDefault();
+    if (!canSubmitRequest) {
+      error =
+        requestLoginError ||
+        requestEmailError ||
+        requestPasswordError ||
+        requestConfirmError ||
+        m('common.validation.fix_errors');
+      return;
+    }
+
+    error = '';
+    isLoading = true;
+    try {
+      const response = await fetch('/auth/register/request', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          login: requestLogin.trim(),
+          email: requestEmail.trim().toLowerCase(),
+          password: requestPassword,
+          passwordConfirmation: requestConfirmPassword,
+          note: requestNote.trim()
+        })
+      });
+      const body = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        error = body.error || m('auth.register.request.failed');
+        return;
+      }
+
+      requestPassword = '';
+      requestConfirmPassword = '';
+      requestSubmitted = true;
+    } catch (err) {
+      error = errorMessage(err, m('auth.register.request.failed'));
+    } finally {
+      isLoading = false;
+    }
+  }
+
   async function handleDetailsSubmit(e: Event) {
     e.preventDefault();
     if (!completionToken || loginError || passwordError || confirmError) {
@@ -234,11 +322,13 @@
 <PageTitle title={m('auth.register.title')} />
 
 <AuthLayout
-  title={step === 'code'
-    ? m('auth.register.code.title')
-    : step === 'details'
-      ? m('auth.register.complete_title')
-      : m('auth.register.title')}
+  title={requestMode
+    ? m('auth.register.request.title')
+    : step === 'code'
+      ? m('auth.register.code.title')
+      : step === 'details'
+        ? m('auth.register.complete_title')
+        : m('auth.register.title')}
 >
   {#if !selfServiceAvailable}
     <Hint>{m('auth.register.unavailable')}</Hint>
@@ -249,6 +339,86 @@
         <FormError error={m('auth.register.invitation.invalid')} />
       {/if}
     </div>
+  {:else if requestMode}
+    {#if requestSubmitted}
+      <div class="flex flex-col gap-3 text-center">
+        <p class="font-semibold">{m('auth.register.request.submitted_title')}</p>
+        <p class="text-muted">{m('auth.register.request.submitted')}</p>
+      </div>
+    {:else}
+      <form onsubmit={handleRequestSubmit} class="flex flex-col gap-4">
+        <p class="text-muted">{m('auth.register.request.intro')}</p>
+
+        <TextInput
+          id="request-login"
+          label={m('common.username')}
+          bind:value={requestLogin}
+          placeholder={m('common.username_placeholder')}
+          disabled={isLoading}
+          required
+          autocomplete="username"
+          error={requestLoginError}
+        />
+
+        <TextInput
+          id="request-email"
+          label={m('common.email')}
+          type="email"
+          bind:value={requestEmail}
+          placeholder={m('common.email_placeholder')}
+          disabled={isLoading}
+          required
+          autocomplete="email"
+          error={requestEmailError}
+        />
+
+        <TextInput
+          id="request-password"
+          label={m('common.password')}
+          type="password"
+          bind:value={requestPassword}
+          placeholder={m('common.password_bytes_placeholder')}
+          disabled={isLoading}
+          required
+          autocomplete="new-password"
+          error={requestPasswordError}
+        />
+
+        <TextInput
+          id="request-password-confirm"
+          label={m('common.confirm_password')}
+          type="password"
+          bind:value={requestConfirmPassword}
+          placeholder={m('common.password_confirm_placeholder')}
+          disabled={isLoading}
+          required
+          autocomplete="new-password"
+          error={requestConfirmError}
+        />
+
+        <TextArea
+          id="request-note"
+          label={m('auth.register.request.note_label')}
+          placeholder={m('auth.register.request.note_placeholder')}
+          bind:value={requestNote}
+          disabled={isLoading}
+          maxlength={1000}
+        />
+
+        <FormError {error} />
+
+        <Button
+          type="submit"
+          size="lg"
+          disabled={!canSubmitRequest}
+          loading={isLoading}
+          loadingText={m('auth.register.request.submitting')}
+        >
+          <span aria-hidden="true" class="iconify icon-[uil--envelope-check]"></span>
+          {m('auth.register.request.submit')}
+        </Button>
+      </form>
+    {/if}
   {:else if step === 'email'}
     {#if registrationEnabled}
       <form onsubmit={handleEmailSubmit} class="flex flex-col gap-4">

@@ -575,6 +575,21 @@
         "exhausted": "Esaurito",
         "revoked": "Revocato"
       }
+    },
+    "registration_requests": {
+      "title": "Richieste di registrazione",
+      "subtitle": "Richieste di account in attesa di una decisione. L'approvazione crea l'account con la password scelta dal richiedente.",
+      "empty": "Nessuna richiesta di registrazione è in attesa di revisione.",
+      "email": "Email",
+      "submitted": "Inviata {time}",
+      "approve": "Approva",
+      "deny": "Rifiuta",
+      "deny_title": "Rifiutare questa richiesta?",
+      "deny_description": "Il richiedente non otterrà un account. La richiesta verrà rimossa.",
+      "approved": "Account {login} creato.",
+      "denied": "Richiesta rifiutata.",
+      "failed": "Impossibile aggiornare la richiesta.",
+      "load_more": "Carica altri"
     }
   }
 }

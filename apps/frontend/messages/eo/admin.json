@@ -575,6 +575,21 @@
         "exhausted": "Elĉerpita",
         "revoked": "Revokita"
       }
+    },
+    "registration_requests": {
+      "title": "Registrpetoj",
+      "subtitle": "Kontopetoj, kiuj atendas decidon. Aprobo kreas la konton kun la pasvorto elektita de la petanto.",
+      "empty": "Neniu registrpeto atendas revizion.",
+      "email": "Retpoŝto",
+      "submitted": "Sendita {time}",
+      "approve": "Aprobi",
+      "deny": "Malaprobi",
+      "deny_title": "Ĉu malaprobi ĉi tiun peton?",
+      "deny_description": "La petanto ne ricevos konton. La peto estos forigita.",
+      "approved": "Kreis la konton {login}.",
+      "denied": "Peto malaprobita.",
+      "failed": "La peto ne povis esti ĝisdatigita.",
+      "load_more": "Ŝarĝi pli"
     }
   }
 }

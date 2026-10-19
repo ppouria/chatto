@@ -575,6 +575,21 @@
         "exhausted": "Exhausted",
         "revoked": "Revoked"
       }
+    },
+    "registration_requests": {
+      "title": "Registration requests",
+      "subtitle": "Account requests that wait for a decision. Approving creates the account with the password the applicant chose.",
+      "empty": "No registration requests are waiting for review.",
+      "email": "Email",
+      "submitted": "Submitted {time}",
+      "approve": "Approve",
+      "deny": "Deny",
+      "deny_title": "Deny this request?",
+      "deny_description": "The applicant does not get an account. The request is removed.",
+      "approved": "Created the account {login}.",
+      "denied": "Denied the request.",
+      "failed": "The request could not be updated.",
+      "load_more": "Load more"
     }
   }
 }

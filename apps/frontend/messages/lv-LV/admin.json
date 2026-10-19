@@ -586,6 +586,21 @@
         "exhausted": "Izlietota",
         "revoked": "Atsaukta"
       }
+    },
+    "registration_requests": {
+      "title": "Reģistrācijas pieteikumi",
+      "subtitle": "Konta pieteikumi, kas gaida lēmumu. Apstiprinot, konts tiek izveidots ar pieteikuma iesniedzēja izvēlēto paroli.",
+      "empty": "Nav reģistrācijas pieteikumu, kas gaida pārskatīšanu.",
+      "email": "E-pasts",
+      "submitted": "Nosūtīts {time}",
+      "approve": "Apstiprināt",
+      "deny": "Noraidīt",
+      "deny_title": "Noraidīt šo pieteikumu?",
+      "deny_description": "Pieteikuma iesniedzējs nesaņems kontu. Pieteikums tiks dzēsts.",
+      "approved": "Konts {login} izveidots.",
+      "denied": "Pieteikums noraidīts.",
+      "failed": "Pieteikumu nevarēja atjaunināt.",
+      "load_more": "Ielādēt vairāk"
     }
   }
 }

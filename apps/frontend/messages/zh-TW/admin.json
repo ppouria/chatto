@@ -564,6 +564,21 @@
         "exhausted": "已用完",
         "revoked": "已撤銷"
       }
+    },
+    "registration_requests": {
+      "title": "註冊申請",
+      "subtitle": "等待處理的帳號申請。批准後，將使用申請人設定的密碼建立帳號。",
+      "empty": "沒有等待審核的註冊申請。",
+      "email": "電子郵件",
+      "submitted": "提交於 {time}",
+      "approve": "批准",
+      "deny": "拒絕",
+      "deny_title": "拒絕此申請？",
+      "deny_description": "申請人不會取得帳號，此申請將被刪除。",
+      "approved": "已建立帳號 {login}。",
+      "denied": "已拒絕申請。",
+      "failed": "無法更新申請。",
+      "load_more": "載入更多"
     }
   }
 }

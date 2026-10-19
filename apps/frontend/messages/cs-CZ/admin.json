@@ -597,6 +597,21 @@
         "exhausted": "Vyčerpán",
         "revoked": "Odvolán"
       }
+    },
+    "registration_requests": {
+      "title": "Žádosti o registraci",
+      "subtitle": "Žádosti o účet čekající na rozhodnutí. Schválením se vytvoří účet s heslem, které zvolil žadatel.",
+      "empty": "Žádné žádosti o registraci nečekají na posouzení.",
+      "email": "E-mail",
+      "submitted": "Odesláno {time}",
+      "approve": "Schválit",
+      "deny": "Zamítnout",
+      "deny_title": "Zamítnout tuto žádost?",
+      "deny_description": "Žadatel účet nedostane. Žádost bude odstraněna.",
+      "approved": "Účet {login} byl vytvořen.",
+      "denied": "Žádost zamítnuta.",
+      "failed": "Žádost nebylo možné aktualizovat.",
+      "load_more": "Načíst další"
     }
   }
 }

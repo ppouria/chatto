@@ -564,6 +564,21 @@
         "exhausted": "已用完",
         "revoked": "已撤销"
       }
+    },
+    "registration_requests": {
+      "title": "注册申请",
+      "subtitle": "等待处理的账号申请。批准后，将使用申请人设置的密码创建账号。",
+      "empty": "没有等待审核的注册申请。",
+      "email": "邮箱",
+      "submitted": "提交于 {time}",
+      "approve": "批准",
+      "deny": "拒绝",
+      "deny_title": "拒绝此申请？",
+      "deny_description": "申请人不会获得账号，该申请将被删除。",
+      "approved": "已创建账号 {login}。",
+      "denied": "已拒绝申请。",
+      "failed": "无法更新申请。",
+      "load_more": "加载更多"
     }
   }
 }

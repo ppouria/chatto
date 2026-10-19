@@ -23,6 +23,9 @@ export const adminQueryKeys = {
   invitations(serverId: string, connection: AdminQueryConnection) {
     return [...adminRoot(serverId, connection), 'invitations'] as const;
   },
+  registrationRequests(serverId: string, connection: AdminQueryConnection) {
+    return [...adminRoot(serverId, connection), 'registration-requests'] as const;
+  },
   neighbors(serverId: string, connection: AdminQueryConnection) {
     return [...adminRoot(serverId, connection), 'neighbors'] as const;
   },

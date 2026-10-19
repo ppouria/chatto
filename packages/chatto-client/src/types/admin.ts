@@ -16,6 +16,8 @@ export * from '@chatto/api-types/admin/v1/oauth_clients_connect';
 export * from '@chatto/api-types/admin/v1/oauth_clients_pb';
 export * from '@chatto/api-types/admin/v1/permissions_connect';
 export * from '@chatto/api-types/admin/v1/permissions_pb';
+export * from '@chatto/api-types/admin/v1/registration_requests_connect';
+export * from '@chatto/api-types/admin/v1/registration_requests_pb';
 export * from '@chatto/api-types/admin/v1/roles_connect';
 export * from '@chatto/api-types/admin/v1/roles_pb';
 export * from '@chatto/api-types/admin/v1/room_layout_connect';

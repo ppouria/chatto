@@ -575,6 +575,21 @@
         "exhausted": "Ammendatud",
         "revoked": "Tühistatud"
       }
+    },
+    "registration_requests": {
+      "title": "Registreerimistaotlused",
+      "subtitle": "Otsust ootavad kontotaotlused. Kinnitamisel luuakse konto taotleja valitud parooliga.",
+      "empty": "Ülevaatamist ootavaid registreerimistaotlusi pole.",
+      "email": "E-post",
+      "submitted": "Saadetud {time}",
+      "approve": "Kinnita",
+      "deny": "Keeldu",
+      "deny_title": "Kas keelduda sellest taotlusest?",
+      "deny_description": "Taotleja konto ei saa. Taotlus eemaldatakse.",
+      "approved": "Konto {login} loodi.",
+      "denied": "Taotlus tagasi lükatud.",
+      "failed": "Taotlust ei saanud uuendada.",
+      "load_more": "Laadi rohkem"
     }
   }
 }

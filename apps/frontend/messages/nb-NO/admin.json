@@ -575,6 +575,21 @@
         "exhausted": "Oppbrukt",
         "revoked": "Trukket tilbake"
       }
+    },
+    "registration_requests": {
+      "title": "Registreringsforespørsler",
+      "subtitle": "Kontoforespørsler som venter på en avgjørelse. Godkjenning oppretter kontoen med passordet søkeren valgte.",
+      "empty": "Ingen registreringsforespørsler venter på gjennomgang.",
+      "email": "E-post",
+      "submitted": "Sendt {time}",
+      "approve": "Godkjenn",
+      "deny": "Avslå",
+      "deny_title": "Avslå denne forespørselen?",
+      "deny_description": "Søkeren får ingen konto. Forespørselen fjernes.",
+      "approved": "Kontoen {login} ble opprettet.",
+      "denied": "Forespørselen ble avslått.",
+      "failed": "Forespørselen kunne ikke oppdateres.",
+      "load_more": "Last inn flere"
     }
   }
 }

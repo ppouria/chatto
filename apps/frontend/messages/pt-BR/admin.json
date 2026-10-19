@@ -575,6 +575,21 @@
         "exhausted": "Esgotado",
         "revoked": "Revogado"
       }
+    },
+    "registration_requests": {
+      "title": "Solicitações de registro",
+      "subtitle": "Solicitações de conta aguardando decisão. Ao aprovar, a conta é criada com a senha escolhida pela pessoa solicitante.",
+      "empty": "Nenhuma solicitação de registro aguarda análise.",
+      "email": "E-mail",
+      "submitted": "Enviada em {time}",
+      "approve": "Aprovar",
+      "deny": "Recusar",
+      "deny_title": "Recusar esta solicitação?",
+      "deny_description": "A pessoa solicitante não receberá uma conta. A solicitação será removida.",
+      "approved": "A conta {login} foi criada.",
+      "denied": "Solicitação recusada.",
+      "failed": "Não foi possível atualizar a solicitação.",
+      "load_more": "Carregar mais"
     }
   }
 }

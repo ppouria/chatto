@@ -575,6 +575,21 @@
         "exhausted": "Opgebruikt",
         "revoked": "Ingetrokken"
       }
+    },
+    "registration_requests": {
+      "title": "Registratieverzoeken",
+      "subtitle": "Accountverzoeken die wachten op een beslissing. Goedkeuren maakt het account aan met het wachtwoord dat de aanvrager heeft gekozen.",
+      "empty": "Er wachten geen registratieverzoeken op beoordeling.",
+      "email": "E-mail",
+      "submitted": "Verzonden {time}",
+      "approve": "Goedkeuren",
+      "deny": "Afwijzen",
+      "deny_title": "Dit verzoek afwijzen?",
+      "deny_description": "De aanvrager krijgt geen account. Het verzoek wordt verwijderd.",
+      "approved": "Account {login} is aangemaakt.",
+      "denied": "Verzoek afgewezen.",
+      "failed": "Het verzoek kon niet worden bijgewerkt.",
+      "load_more": "Meer laden"
     }
   }
 }

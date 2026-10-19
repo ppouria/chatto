@@ -575,6 +575,21 @@
         "exhausted": "Agotado",
         "revoked": "Revocado"
       }
+    },
+    "registration_requests": {
+      "title": "Solicitudes de registro",
+      "subtitle": "Solicitudes de cuenta pendientes de decisión. Al aprobarla, se crea la cuenta con la contraseña que eligió la persona solicitante.",
+      "empty": "No hay solicitudes de registro pendientes de revisión.",
+      "email": "Correo electrónico",
+      "submitted": "Enviada {time}",
+      "approve": "Aprobar",
+      "deny": "Rechazar",
+      "deny_title": "¿Rechazar esta solicitud?",
+      "deny_description": "La persona solicitante no recibirá una cuenta. La solicitud se eliminará.",
+      "approved": "Se creó la cuenta {login}.",
+      "denied": "Solicitud rechazada.",
+      "failed": "No se pudo actualizar la solicitud.",
+      "load_more": "Cargar más"
     }
   }
 }

@@ -75,6 +75,16 @@ export function getAdminNavItems({
     });
   }
 
+  if (permissions.canManageInvites) {
+    items.push({
+      href: resolve('/chat/[serverId]/manage/server/registration-requests', {
+        serverId: serverSegment
+      }),
+      label: m('chat.management_nav.registration_requests'),
+      icon: 'iconify icon-[uil--user-check]'
+    });
+  }
+
   if (permissions.canManageRooms) {
     items.push({
       href: resolve('/chat/[serverId]/manage/rooms', { serverId: serverSegment }),

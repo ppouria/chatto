@@ -575,6 +575,21 @@
         "exhausted": "Förbrukad",
         "revoked": "Återkallad"
       }
+    },
+    "registration_requests": {
+      "title": "Registreringsförfrågningar",
+      "subtitle": "Kontoförfrågningar som väntar på beslut. Godkännande skapar kontot med lösenordet som sökanden valde.",
+      "empty": "Inga registreringsförfrågningar väntar på granskning.",
+      "email": "E-post",
+      "submitted": "Skickad {time}",
+      "approve": "Godkänn",
+      "deny": "Neka",
+      "deny_title": "Neka den här förfrågan?",
+      "deny_description": "Sökanden får inget konto. Förfrågan tas bort.",
+      "approved": "Kontot {login} skapades.",
+      "denied": "Förfrågan nekades.",
+      "failed": "Förfrågan kunde inte uppdateras.",
+      "load_more": "Visa fler"
     }
   }
 }

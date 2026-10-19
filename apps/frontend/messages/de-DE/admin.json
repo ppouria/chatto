@@ -575,6 +575,21 @@
         "exhausted": "Aufgebraucht",
         "revoked": "Widerrufen"
       }
+    },
+    "registration_requests": {
+      "title": "Registrierungsanfragen",
+      "subtitle": "Kontoanfragen, die auf eine Entscheidung warten. Bei einer Genehmigung wird das Konto mit dem Passwort erstellt, das die antragstellende Person gewählt hat.",
+      "empty": "Keine Registrierungsanfragen warten auf Prüfung.",
+      "email": "E-Mail",
+      "submitted": "Gesendet {time}",
+      "approve": "Genehmigen",
+      "deny": "Ablehnen",
+      "deny_title": "Diese Anfrage ablehnen?",
+      "deny_description": "Die antragstellende Person erhält kein Konto. Die Anfrage wird entfernt.",
+      "approved": "Konto {login} wurde erstellt.",
+      "denied": "Anfrage abgelehnt.",
+      "failed": "Die Anfrage konnte nicht aktualisiert werden.",
+      "load_more": "Mehr laden"
     }
   }
 }

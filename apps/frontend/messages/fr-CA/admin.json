@@ -575,6 +575,21 @@
         "exhausted": "Épuisé",
         "revoked": "Révoqué"
       }
+    },
+    "registration_requests": {
+      "title": "Demandes d’inscription",
+      "subtitle": "Demandes de compte en attente de décision. L’approbation crée le compte avec le mot de passe choisi par le demandeur.",
+      "empty": "Aucune demande d’inscription n’attend d’examen.",
+      "email": "Courriel",
+      "submitted": "Envoyée {time}",
+      "approve": "Approuver",
+      "deny": "Refuser",
+      "deny_title": "Refuser cette demande ?",
+      "deny_description": "Le demandeur n’obtiendra pas de compte. La demande sera supprimée.",
+      "approved": "Le compte {login} a été créé.",
+      "denied": "Demande refusée.",
+      "failed": "La demande n’a pas pu être mise à jour.",
+      "load_more": "Charger davantage"
     }
   }
 }

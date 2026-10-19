@@ -575,6 +575,21 @@
         "exhausted": "Tükendi",
         "revoked": "İptal edildi"
       }
+    },
+    "registration_requests": {
+      "title": "Kayıt istekleri",
+      "subtitle": "Karar bekleyen hesap istekleri. Onaylamak, başvuranın seçtiği parolayla hesabı oluşturur.",
+      "empty": "İncelenmeyi bekleyen kayıt isteği yok.",
+      "email": "E-posta",
+      "submitted": "Gönderildi: {time}",
+      "approve": "Onayla",
+      "deny": "Reddet",
+      "deny_title": "Bu istek reddedilsin mi?",
+      "deny_description": "Başvuran bir hesap almayacak. İstek kaldırılacak.",
+      "approved": "{login} hesabı oluşturuldu.",
+      "denied": "İstek reddedildi.",
+      "failed": "İstek güncellenemedi.",
+      "load_more": "Daha fazla yükle"
     }
   }
 }
