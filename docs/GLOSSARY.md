@@ -89,6 +89,8 @@ another address does not change the selection. See
 
 **Invite Link** — Shareable, revocable link that admits one or more new accounts when a server uses invite-only account creation; it may have a use limit or expiry. See [FDR-036](fdr/FDR-036-invite-links.md).
 
+**Registration Request** — A pending self-service account request under the `approval` policy. An administrator approves it, which creates the account, or denies it. See [FDR-051](fdr/FDR-051-registration-requests.md).
+
 **Space** — Legacy tier between server and room. Being consolidated into the server concept; in most deployments there is exactly one space per server (the _primary space_). See [ADR-027](adr/ADR-027-instance-space-server-consolidation.md).
 
 **Primary Space** — Transitional config-designated "the one space that matters" within a server. Bridge construct used while Instance + Space collapse into Server. See [ADR-027](adr/ADR-027-instance-space-server-consolidation.md).
