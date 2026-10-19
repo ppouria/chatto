@@ -1,0 +1,136 @@
+# Builds the Chatto server for linux/amd64 and linux/arm64 on native runners, runs each
+# binary, and attests its provenance. Start it with `gh workflow run build-binaries.yml`.
+name: build-binaries
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: build (${{ matrix.arch }})
+    runs-on: ${{ matrix.runner }}
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: amd64
+            runner: ubuntu-24.04
+          - arch: arm64
+            runner: ubuntu-24.04-arm
+    env:
+      SHARP_IGNORE_GLOBAL_LIBVIPS: '1'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: pnpm
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.27.1'
+          cache-dependency-path: cli/go.sum
+
+      - name: Install frontend dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Same steps as `mise build-frontend`. The Go binary embeds the built SPA.
+      - name: Build the embedded frontend
+        working-directory: apps/frontend
+        env:
+          CHATTO_FRONTEND_PRECOMPRESS: '1'
+        run: |
+          set -euo pipefail
+          pnpm --dir ../.. run build:frontend
+          bash ../../tools/prepare-embedded-frontend.sh build ../../cli/internal/http_server/.client
+
+      - name: Stage legal files for go:embed
+        run: |
+          set -euo pipefail
+          mkdir -p cli/cmd/embedded
+          cp LICENSES/AGPL-3.0-or-later.txt cli/LICENSE
+          cp NOTICE cli/NOTICE
+          cp LICENSES/AGPL-3.0-or-later.txt cli/cmd/embedded/LICENSE
+          cp NOTICE cli/cmd/embedded/NOTICE
+
+      - name: Resolve version
+        id: version
+        run: |
+          set -euo pipefail
+          base="$(sed -n 's/.*Version = "\([^"]*\)".*/\1/p' cli/version.go)"
+          echo "version=${base}+fork.${GITHUB_SHA:0:12}" >> "$GITHUB_OUTPUT"
+
+      # Release flags as in .goreleaser.yml. The dev-only `bootstrap` tag is left out.
+      - name: Build the binary
+        working-directory: cli
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+          ARCH: ${{ matrix.arch }}
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/out"
+          mkdir -p "$out"
+          CGO_ENABLED=0 GOOS=linux GOARCH="$ARCH" go build -trimpath \
+            -ldflags="-s -w -X main.Version=${VERSION}" -o "$out/chatto" .
+          sha256sum "$out/chatto" | tee "$out/chatto.sha256"
+          file "$out/chatto"
+
+      # Runs on the native runner, so an arm64 build is executed on arm64.
+      - name: Smoke test the binary
+        env:
+          BIN: ${{ runner.temp }}/out/chatto
+        run: |
+          set -euo pipefail
+          "$BIN" version
+          work="$(mktemp -d)"
+          cd "$work"
+          "$BIN" init
+          "$BIN" run > server.log 2>&1 &
+          pid=$!
+          ready=0
+          for _ in $(seq 1 90); do
+            if curl -fsS http://127.0.0.1:4000/healthz >/dev/null 2>&1; then
+              ready=1
+              break
+            fi
+            sleep 1
+          done
+          if [ "$ready" -ne 1 ]; then
+            echo "::error::healthz did not answer"
+            cat server.log
+            kill "$pid" 2>/dev/null || true
+            exit 1
+          fi
+          status="$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:4000/)"
+          echo "GET / -> $status"
+          kill "$pid" 2>/dev/null || true
+          wait "$pid" 2>/dev/null || true
+          test "$status" = "200"
+          echo "### Smoke test ($ARCH)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- healthz: ok, GET /: $status" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Attest build provenance
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: ${{ runner.temp }}/out/chatto
+
+      - name: Upload binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: chatto-linux-${{ matrix.arch }}
+          path: ${{ runner.temp }}/out/
+          if-no-files-found: error
