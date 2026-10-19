@@ -3,6 +3,23 @@
 All notable changes to Chatto. Maintained by release-please from the
 conventional-commit messages on `main` — do not edit by hand.
 
+## [0.5.0-beta.19](https://github.com/chattocorp/chatto/compare/v0.5.0-beta.18...v0.5.0-beta.19) (2026-10-19)
+
+
+### ⚠ BREAKING CHANGES
+
+* **runling:** type task steering and stream Paseo progress ([#3076](https://github.com/chattocorp/chatto/issues/3076))
+
+### Features
+
+* **runling:** type task steering and stream Paseo progress ([#3076](https://github.com/chattocorp/chatto/issues/3076)) ([b50c6b6](https://github.com/chattocorp/chatto/commit/b50c6b6a041281dbf6323c2eb75291a9e88538b5))
+
+
+### Bug Fixes
+
+* **auth:** align password validation with bcrypt byte limits ([#3079](https://github.com/chattocorp/chatto/issues/3079)) ([33e31ef](https://github.com/chattocorp/chatto/commit/33e31ef0cf29b4c40e665968a24c55de20e0eb76))
+* **frontend:** stabilize Storybook accessibility scans ([#3073](https://github.com/chattocorp/chatto/issues/3073)) ([b7169cb](https://github.com/chattocorp/chatto/commit/b7169cb850d99ab2cc633eadf4a988db1c031e80))
+
 ## [0.5.0-beta.18](https://github.com/chattocorp/chatto/compare/v0.5.0-beta.17...v0.5.0-beta.18) (2026-10-18)
 
 
