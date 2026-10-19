@@ -924,7 +924,8 @@ func (s *HTTPServer) redirectPendingExternalIdentity(c *gin.Context, session ses
 		RedirectPath:    providerReturnPath(session, "/"),
 	}
 
-	if !providerConfig.AutoProvisionOrDefault() {
+	// Under the approval policy, provider logins never create accounts; only a reviewed request does.
+	if !providerConfig.AutoProvisionOrDefault() || s.config.Auth.RegistrationRequestsEnabled() {
 		c.Redirect(http.StatusTemporaryRedirect, "/login?error=external_identity_unlinked")
 		return
 	}

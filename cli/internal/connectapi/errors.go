@@ -47,6 +47,8 @@ var connectErrorCodes = []struct {
 	{connect.CodeAlreadyExists, []error{
 		core.ErrRoomNameExists,
 		core.ErrLoginAlreadyTaken,
+		core.ErrRegistrationRequestEmailTaken,
+		core.ErrRegistrationRequestConflict,
 		core.ErrEmailAlreadyVerified,
 		core.ErrExternalIdentityAlreadyClaimed,
 		core.ErrRoleAlreadyExists,
@@ -79,10 +81,12 @@ var connectErrorCodes = []struct {
 		core.ErrInvalidRoleName,
 		core.ErrInvalidPermission,
 		core.ErrInvitationInvalid,
+		core.ErrRegistrationRequestNoteTooLong,
 		core.ErrInvalidArgument,
 	}},
 	{connect.CodeNotFound, []error{
 		core.ErrNotFound,
+		core.ErrRegistrationRequestNotFound,
 		core.ErrExternalIdentityNotFound,
 		core.ErrExternalIdentityFlowNotFound,
 		core.ErrExternalIdentityFlowExpired,
@@ -97,6 +101,7 @@ var connectErrorCodes = []struct {
 	}},
 	{connect.CodeInvalidArgument, []error{core.ErrMessageTooLong}},
 	{connect.CodeResourceExhausted, []error{
+		core.ErrRegistrationRequestsFull,
 		core.ErrLimitExceeded,
 		core.ErrReactionLimitExceeded,
 		core.ErrPushSubscriptionLimitReached,

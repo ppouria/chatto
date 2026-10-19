@@ -10,6 +10,9 @@ import (
 const (
 	AccountCreationPolicyOpen       = "open"
 	AccountCreationPolicyInviteOnly = "invite_only"
+	// AccountCreationPolicyApproval lets applicants submit a request that an administrator
+	// approves or denies. Direct email registration is off under this policy.
+	AccountCreationPolicyApproval = "approval"
 
 	// DefaultEmailOTPTTL is the fallback lifetime for registration and email-verification codes.
 	DefaultEmailOTPTTL = 30 * time.Minute
@@ -144,7 +147,7 @@ func IsAllowedAuthProviderType(providerType string) bool {
 type AuthConfig struct {
 	DirectRegistration    *bool                `toml:"direct_registration" env:"CHATTO_AUTH_DIRECT_REGISTRATION" comment:"Enable direct (email/password) registration. When false, self-service account creation is disabled; existing accounts can still sign in. Default: true."`
 	DirectLogin           *bool                `toml:"direct_login" env:"CHATTO_AUTH_DIRECT_LOGIN" comment:"Enable direct login with a username or email address and password. When false, users must sign in via configured SSO providers. Default: true."`
-	AccountCreationPolicy string               `toml:"account_creation_policy,commented" env:"CHATTO_AUTH_ACCOUNT_CREATION_POLICY" comment:"Account admission policy: open or invite_only. Default: open. Upgrade every serving replica before enabling invite_only."`
+	AccountCreationPolicy string               `toml:"account_creation_policy,commented" env:"CHATTO_AUTH_ACCOUNT_CREATION_POLICY" comment:"Account admission policy: open, invite_only, or approval. approval replaces email registration with requests that an administrator reviews. Default: open. Upgrade every serving replica before enabling invite_only."`
 	TokenTTL              Duration             `toml:"token_ttl,commented" env:"CHATTO_AUTH_TOKEN_TTL" comment:"Renewal window for active human sessions and lifetime of each same-origin cookie credential. Supports human-readable durations like '90d', '2160h'. Default: 90d."`
 	AccessTokenTTL        Duration             `toml:"access_token_ttl,commented" env:"CHATTO_AUTH_ACCESS_TOKEN_TTL" comment:"Lifetime for renewable bearer access tokens. Supports human-readable durations like '15m'. Default: 15m."`
 	LoopbackClientEnabled bool                 `toml:"loopback_client_enabled,commented" env:"CHATTO_AUTH_LOOPBACK_CLIENT_ENABLED" comment:"Let a Chatto web client that runs on a local address of the user's device, such as a development server on localhost, sign in to this server. Its sessions end at most 24 hours after sign-in. Disabling this setting also ends existing sessions of that client. Upgrade every serving replica before enabling, and use the same value on every replica; sign-ins made while replicas differ can end. Default: false."`
@@ -161,6 +164,11 @@ func (c *AuthConfig) AccountCreationPolicyOrDefault() string {
 
 func (c *AuthConfig) InvitationRequired() bool {
 	return c.AccountCreationPolicyOrDefault() == AccountCreationPolicyInviteOnly
+}
+
+// RegistrationRequestsEnabled reports whether applicants may submit account requests for review.
+func (c *AuthConfig) RegistrationRequestsEnabled() bool {
+	return c.AccountCreationPolicyOrDefault() == AccountCreationPolicyApproval
 }
 
 // EmailOTPConfig controls registration and email-verification one-time-password guardrails.
@@ -222,7 +230,11 @@ func (c *AuthConfig) AccessTokenTTLOrDefault() time.Duration {
 }
 
 // DirectRegistrationOrDefault returns whether direct (email/password) registration is enabled (default: true).
+// The approval policy replaces it with reviewed registration requests, so it is always off there.
 func (c *AuthConfig) DirectRegistrationOrDefault() bool {
+	if c.AccountCreationPolicyOrDefault() == AccountCreationPolicyApproval {
+		return false
+	}
 	if c.DirectRegistration == nil {
 		return true
 	}

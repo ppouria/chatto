@@ -138,6 +138,9 @@ func apiAccountCreationPolicy(policy string) apiv1.AccountCreationPolicy {
 	if policy == config.AccountCreationPolicyInviteOnly {
 		return apiv1.AccountCreationPolicy_ACCOUNT_CREATION_POLICY_INVITE_ONLY
 	}
+	if policy == config.AccountCreationPolicyApproval {
+		return apiv1.AccountCreationPolicy_ACCOUNT_CREATION_POLICY_APPROVAL
+	}
 	return apiv1.AccountCreationPolicy_ACCOUNT_CREATION_POLICY_OPEN
 }
 

@@ -61,6 +61,10 @@ func (s *externalIdentityAuthService) CreateExternalIdentityAccount(ctx context.
 	if err != nil {
 		return nil, err
 	}
+	// The approval policy admits accounts only through reviewed registration requests.
+	if s.api.config.Auth.RegistrationRequestsEnabled() {
+		return nil, core.ErrPermissionDenied
+	}
 	if s.api.config.Auth.InvitationRequired() {
 		if strings.TrimSpace(flow.InvitationID) == "" {
 			return nil, core.ErrInvitationInvalid

@@ -909,6 +909,53 @@ func (s *HTTPServer) setupAuthRoutes() {
 
 		c.JSON(http.StatusOK, response)
 	}
+	// submitRegistrationRequest queues an applicant's account request for an administrator.
+	// No account is created here, and the response never says whether a request was approved.
+	submitRegistrationRequest := func(c *gin.Context) {
+		c.Header("Cache-Control", "no-store")
+		c.Header("Pragma", "no-cache")
+		if !s.config.Auth.RegistrationRequestsEnabled() {
+			c.JSON(http.StatusForbidden, gin.H{"error": "Registration requests are not enabled"})
+			return
+		}
+
+		var req struct {
+			Login                string `json:"login" binding:"required"`
+			Email                string `json:"email" binding:"required"`
+			Password             string `json:"password" binding:"required"`
+			PasswordConfirmation string `json:"passwordConfirmation" binding:"required"`
+			Note                 string `json:"note"`
+		}
+		if err := c.ShouldBindJSON(&req); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Login, email, password, and password confirmation are required"})
+			return
+		}
+		if req.Password != req.PasswordConfirmation {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Passwords do not match"})
+			return
+		}
+
+		_, err := s.core.SubmitRegistrationRequest(c.Request.Context(), req.Login, req.Email, req.Password, req.Note)
+		switch {
+		case err == nil:
+			c.JSON(http.StatusAccepted, gin.H{"status": "pending"})
+		case errors.Is(err, core.ErrLoginInvalidCharacter), errors.Is(err, core.ErrLoginTooShort), errors.Is(err, core.ErrLoginTooLong),
+			errors.Is(err, core.ErrPasswordTooShort), errors.Is(err, core.ErrPasswordTooLong), errors.Is(err, core.ErrRegistrationRequestNoteTooLong):
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		case errors.Is(err, core.ErrInvalidArgument):
+			c.JSON(http.StatusBadRequest, gin.H{"error": "A valid email address is required"})
+		case errors.Is(err, core.ErrUsernameBlocked):
+			c.JSON(http.StatusBadRequest, gin.H{"error": "This username is not available"})
+		case errors.Is(err, core.ErrLoginAlreadyTaken), errors.Is(err, core.ErrRegistrationRequestEmailTaken), errors.Is(err, core.ErrRegistrationRequestConflict):
+			c.JSON(http.StatusConflict, gin.H{"error": "This username or email address is not available"})
+		case errors.Is(err, core.ErrRegistrationRequestsFull):
+			c.JSON(http.StatusServiceUnavailable, gin.H{"error": "Too many registration requests are waiting for review. Try again later."})
+		default:
+			log.Error("Failed to submit registration request", "error", err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Registration request failed"})
+		}
+	}
+	auth.POST("register/request", s.requireServerSetupComplete, submitRegistrationRequest)
 	auth.POST("register/complete", s.requireServerSetupComplete, requireJSONAuthenticationRequest, completeRegistration)
 	auth.POST("browser/register/complete", s.requireServerSetupComplete, s.requireBrowserAuthenticationRequest, completeRegistration)
 

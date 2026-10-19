@@ -47,6 +47,9 @@ type userCreationOptions struct {
 	botAPIKeyOut  *string
 	botAPIKeyName string
 	authorize     func() error
+	// passwordHash is a bcrypt hash that an approved registration request already holds.
+	// It is used instead of a plaintext password and cannot be combined with one.
+	passwordHash []byte
 }
 
 func (c *ChattoCore) createUserWithOptions(ctx context.Context, actorID string, login, displayName, password string, options userCreationOptions) (*evtv1.User, error) {
@@ -66,7 +69,7 @@ func (c *ChattoCore) createUserWithOptions(ctx context.Context, actorID string, 
 		return nil, err
 	}
 	if isBot {
-		if strings.TrimSpace(options.botOwnerID) == "" || password != "" || options.verifiedEmail != "" || options.external != nil || options.invitationID != "" {
+		if strings.TrimSpace(options.botOwnerID) == "" || password != "" || len(options.passwordHash) > 0 || options.verifiedEmail != "" || options.external != nil || options.invitationID != "" {
 			return nil, ErrInvalidArgument
 		}
 	}
@@ -218,11 +221,18 @@ func (c *ChattoCore) createUserWithOptions(ctx context.Context, actorID string, 
 			Event:   keyCreated,
 		})
 	}
+	if password != "" && len(options.passwordHash) > 0 {
+		return nil, ErrInvalidArgument
+	}
+	hashedPassword := options.passwordHash
 	if password != "" {
-		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), passwordHashCost)
+		hash, err := bcrypt.GenerateFromPassword([]byte(password), passwordHashCost)
 		if err != nil {
 			return nil, fmt.Errorf("failed to hash password: %w", err)
 		}
+		hashedPassword = hash
+	}
+	if len(hashedPassword) > 0 {
 		passwordChanged := newEvent(eventActorID, &evtv1.Event{Event: &evtv1.Event_UserPasswordHashChanged{
 			UserPasswordHashChanged: &evtv1.UserPasswordHashChangedEvent{
 				UserId:       userID,
