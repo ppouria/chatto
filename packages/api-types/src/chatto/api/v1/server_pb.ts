@@ -33,12 +33,21 @@ export enum AccountCreationPolicy {
    * @generated from enum value: ACCOUNT_CREATION_POLICY_INVITE_ONLY = 2;
    */
   INVITE_ONLY = 2,
+
+  /**
+   * Applicants submit account requests that an administrator approves or denies.
+   * Clients that predate this value treat it as unspecified and show no registration.
+   *
+   * @generated from enum value: ACCOUNT_CREATION_POLICY_APPROVAL = 3;
+   */
+  APPROVAL = 3,
 }
 // Retrieve enum metadata with: proto3.getEnumType(AccountCreationPolicy)
 proto3.util.setEnumType(AccountCreationPolicy, "chatto.api.v1.AccountCreationPolicy", [
   { no: 0, name: "ACCOUNT_CREATION_POLICY_UNSPECIFIED" },
   { no: 1, name: "ACCOUNT_CREATION_POLICY_OPEN" },
   { no: 2, name: "ACCOUNT_CREATION_POLICY_INVITE_ONLY" },
+  { no: 3, name: "ACCOUNT_CREATION_POLICY_APPROVAL" },
 ]);
 
 /**

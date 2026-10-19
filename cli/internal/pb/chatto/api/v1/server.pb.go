@@ -31,6 +31,9 @@ const (
 	AccountCreationPolicy_ACCOUNT_CREATION_POLICY_OPEN AccountCreationPolicy = 1
 	// Every self-service account creation path requires a valid invitation.
 	AccountCreationPolicy_ACCOUNT_CREATION_POLICY_INVITE_ONLY AccountCreationPolicy = 2
+	// Applicants submit account requests that an administrator approves or denies.
+	// Clients that predate this value treat it as unspecified and show no registration.
+	AccountCreationPolicy_ACCOUNT_CREATION_POLICY_APPROVAL AccountCreationPolicy = 3
 )
 
 // Enum value maps for AccountCreationPolicy.
@@ -39,11 +42,13 @@ var (
 		0: "ACCOUNT_CREATION_POLICY_UNSPECIFIED",
 		1: "ACCOUNT_CREATION_POLICY_OPEN",
 		2: "ACCOUNT_CREATION_POLICY_INVITE_ONLY",
+		3: "ACCOUNT_CREATION_POLICY_APPROVAL",
 	}
 	AccountCreationPolicy_value = map[string]int32{
 		"ACCOUNT_CREATION_POLICY_UNSPECIFIED": 0,
 		"ACCOUNT_CREATION_POLICY_OPEN":        1,
 		"ACCOUNT_CREATION_POLICY_INVITE_ONLY": 2,
+		"ACCOUNT_CREATION_POLICY_APPROVAL":    3,
 	}
 )
 
@@ -271,11 +276,12 @@ const file_chatto_api_v1_server_proto_rawDesc = "" +
 	"\rauthorize_url\x18\x03 \x01(\tR\fauthorizeUrl\x12\\\n" +
 	"\x17account_creation_policy\x18\x04 \x01(\x0e2$.chatto.api.v1.AccountCreationPolicyR\x15accountCreationPolicy\x125\n" +
 	"\x14direct_login_enabled\x18\x05 \x01(\bH\x00R\x12directLoginEnabled\x88\x01\x01B\x17\n" +
-	"\x15_direct_login_enabled*\x8b\x01\n" +
+	"\x15_direct_login_enabled*\xb1\x01\n" +
 	"\x15AccountCreationPolicy\x12'\n" +
 	"#ACCOUNT_CREATION_POLICY_UNSPECIFIED\x10\x00\x12 \n" +
 	"\x1cACCOUNT_CREATION_POLICY_OPEN\x10\x01\x12'\n" +
-	"#ACCOUNT_CREATION_POLICY_INVITE_ONLY\x10\x02B\xb8\x01\n" +
+	"#ACCOUNT_CREATION_POLICY_INVITE_ONLY\x10\x02\x12$\n" +
+	" ACCOUNT_CREATION_POLICY_APPROVAL\x10\x03B\xb8\x01\n" +
 	"\x11com.chatto.api.v1B\vServerProtoP\x01Z@github.com/chattocorp/chatto/cli/internal/pb/chatto/api/v1;apiv1\xa2\x02\x03CAX\xaa\x02\rChatto.Api.V1\xca\x02\rChatto\\Api\\V1\xe2\x02\x19Chatto\\Api\\V1\\GPBMetadata\xea\x02\x0fChatto::Api::V1b\x06proto3"
 
 var (

@@ -1,0 +1,115 @@
+---
+title: AdminRegistrationRequestService
+description: Review of self-service account requests.
+editUrl: false
+---
+
+{/* Generated from proto/chatto/{auth,discovery,api,admin,realtime}/v1/*.proto. Do not edit directly. */}
+
+Chatto exposes this service below `/api/connect`.
+
+
+
+Shared message and enum definitions are documented in [Shared Types And Enums](/reference/connectrpc-api/types/).
+
+
+
+<a id="chatto-admin-v1-AdminRegistrationRequestService"></a>
+
+## AdminRegistrationRequestService
+
+Administrators review self-service account requests. Every method requires user.invite.
+
+<a id="chatto-admin-v1-AdminRegistrationRequestService-ListRegistrationRequests"></a>
+
+### ListRegistrationRequests
+
+Lists pending requests, oldest first. Requires user.invite.
+
+```http
+POST /api/connect/chatto.admin.v1.AdminRegistrationRequestService/ListRegistrationRequests
+```
+
+<a id="chatto-admin-v1-ListRegistrationRequestsRequest"></a>
+
+#### Input: ListRegistrationRequestsRequest
+
+No message description provided.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `page` | [`chatto.api.v1.PageRequest`](/reference/connectrpc-api/types/#chatto-api-v1-PageRequest) | Defaults to 20 results when absent or limit is zero. Maximum: 100. |
+
+
+<a id="chatto-admin-v1-ListRegistrationRequestsResponse"></a>
+
+#### Result: ListRegistrationRequestsResponse
+
+No message description provided.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `registration_requests` | repeated [`PendingRegistration`](/reference/connectrpc-api/types/#chatto-admin-v1-PendingRegistration) | No field description provided. |
+| `page` | [`chatto.api.v1.PageInfo`](/reference/connectrpc-api/types/#chatto-api-v1-PageInfo) | No field description provided. |
+
+
+<a id="chatto-admin-v1-AdminRegistrationRequestService-ApproveRegistrationRequest"></a>
+
+### ApproveRegistrationRequest
+
+Creates the account for a pending request and removes the request. Returns NOT_FOUND when the
+request does not exist or has expired. Requires user.invite.
+
+```http
+POST /api/connect/chatto.admin.v1.AdminRegistrationRequestService/ApproveRegistrationRequest
+```
+
+<a id="chatto-admin-v1-ApproveRegistrationRequestRequest"></a>
+
+#### Input: ApproveRegistrationRequestRequest
+
+No message description provided.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | `string` | No field description provided. |
+
+
+<a id="chatto-admin-v1-ApproveRegistrationRequestResponse"></a>
+
+#### Result: ApproveRegistrationRequestResponse
+
+No message description provided.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `login` | `string` | The account that the approval created. It has the login and no email address. |
+
+
+<a id="chatto-admin-v1-AdminRegistrationRequestService-DenyRegistrationRequest"></a>
+
+### DenyRegistrationRequest
+
+Removes a pending request without creating an account. Returns NOT_FOUND when the request does
+not exist or has expired. Requires user.invite.
+
+```http
+POST /api/connect/chatto.admin.v1.AdminRegistrationRequestService/DenyRegistrationRequest
+```
+
+<a id="chatto-admin-v1-DenyRegistrationRequestRequest"></a>
+
+#### Input: DenyRegistrationRequestRequest
+
+No message description provided.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | `string` | No field description provided. |
+
+
+<a id="chatto-admin-v1-DenyRegistrationRequestResponse"></a>
+
+#### Result: DenyRegistrationRequestResponse
+
+No message description provided.

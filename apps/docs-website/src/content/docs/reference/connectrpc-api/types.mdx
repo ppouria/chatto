@@ -1849,6 +1849,21 @@ Complete permission matrix for one user at the matching scopes.
 | `scopes` | repeated [`PermissionMatrixScope`](#chatto-admin-v1-PermissionMatrixScope) | Scopes rendered as columns. |
 | `cells` | repeated [`PermissionMatrixCell`](#chatto-admin-v1-PermissionMatrixCell) | Sparse matrix cells. |
 
+<a id="chatto-admin-v1-PendingRegistration"></a>
+
+### PendingRegistration
+
+A pending self-service account request, shown to administrators. It never includes the
+password, which the server keeps only as a hash until the request is decided.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | `string` | Opaque identifier used for approval and denial. |
+| `login` | `string` | Login that the approved account will use. |
+| `email` | `string` | Email address the applicant entered. It is not verified and is not attached to the account. |
+| `note` | `string` | Optional note from the applicant. It is free text and must not be trusted. |
+| `created_at` | `google.protobuf.Timestamp` | No field description provided. |
+
 <a id="chatto-admin-v1-AdminRoomLayoutGroup"></a>
 
 ### AdminRoomLayoutGroup
@@ -2049,6 +2064,7 @@ Policy controlling whether self-service account creation requires an invitation.
 | `ACCOUNT_CREATION_POLICY_UNSPECIFIED` | `0` | Compatibility value used by older servers. Clients treat it as open. |
 | `ACCOUNT_CREATION_POLICY_OPEN` | `1` | Self-service account creation does not require an invitation. |
 | `ACCOUNT_CREATION_POLICY_INVITE_ONLY` | `2` | Every self-service account creation path requires a valid invitation. |
+| `ACCOUNT_CREATION_POLICY_APPROVAL` | `3` | Applicants submit account requests that an administrator approves or denies. Clients that predate this value treat it as unspecified and show no registration. |
 
 <a id="chatto-api-v1-TimeFormat"></a>
 

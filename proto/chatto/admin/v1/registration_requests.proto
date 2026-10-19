@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package chatto.admin.v1;
+
+import "chatto/api/v1/pagination.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/chattocorp/chatto/cli/internal/pb/chatto/admin/v1;adminv1";
+
+// A pending self-service account request, shown to administrators. It never includes the
+// password, which the server keeps only as a hash until the request is decided.
+message PendingRegistration {
+  // Opaque identifier used for approval and denial.
+  string id = 1;
+  // Login that the approved account will use.
+  string login = 2;
+  // Email address the applicant entered. It is not verified and is not attached to the account.
+  string email = 3;
+  // Optional note from the applicant. It is free text and must not be trusted.
+  string note = 4;
+  google.protobuf.Timestamp created_at = 5;
+}
+
+message ListRegistrationRequestsRequest {
+  // Defaults to 20 results when absent or limit is zero. Maximum: 100.
+  chatto.api.v1.PageRequest page = 1;
+}
+
+message ListRegistrationRequestsResponse {
+  repeated PendingRegistration registration_requests = 1;
+  chatto.api.v1.PageInfo page = 2;
+}
+
+message ApproveRegistrationRequestRequest {
+  string id = 1;
+}
+
+message ApproveRegistrationRequestResponse {
+  // The account that the approval created. It has the login and no email address.
+  string login = 1;
+}
+
+message DenyRegistrationRequestRequest {
+  string id = 1;
+}
+
+message DenyRegistrationRequestResponse {}
+
+// Administrators review self-service account requests. Every method requires user.invite.
+service AdminRegistrationRequestService {
+  // Lists pending requests, oldest first. Requires user.invite.
+  rpc ListRegistrationRequests(ListRegistrationRequestsRequest) returns (ListRegistrationRequestsResponse);
+  // Creates the account for a pending request and removes the request. Returns NOT_FOUND when the
+  // request does not exist or has expired. Requires user.invite.
+  rpc ApproveRegistrationRequest(ApproveRegistrationRequestRequest) returns (ApproveRegistrationRequestResponse);
+  // Removes a pending request without creating an account. Returns NOT_FOUND when the request does
+  // not exist or has expired. Requires user.invite.
+  rpc DenyRegistrationRequest(DenyRegistrationRequestRequest) returns (DenyRegistrationRequestResponse);
+}

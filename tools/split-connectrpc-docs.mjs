@@ -184,6 +184,12 @@ const categories = [
         description: 'Invite-link administration RPCs.'
       },
       {
+        name: 'AdminRegistrationRequestService',
+        slug: 'admin-registration-requests',
+        title: 'Admin Registration Requests',
+        description: 'Review of self-service account requests.'
+      },
+      {
         name: 'AdminOAuthClientService',
         slug: 'admin-oauth-clients',
         title: 'Admin OAuth Clients',

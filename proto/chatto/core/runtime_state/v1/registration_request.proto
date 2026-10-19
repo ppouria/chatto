@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package chatto.core.runtime_state.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/chattocorp/chatto/cli/internal/pb/chatto/core/runtime_state/v1;runtimestatev1";
+
+// RegistrationRequestState is one applicant's pending account request, waiting for an
+// administrator decision. Approving or denying the request deletes the record, and the
+// record expires on its own if no decision is made. The password is stored only as a
+// bcrypt hash. The email and note are kept only until the decision.
+message RegistrationRequestState {
+  string id = 1;
+  string login = 2;
+  string email = 3;
+  string note = 4;
+  bytes password_hash = 5;
+  google.protobuf.Timestamp created_at = 6;
+}
